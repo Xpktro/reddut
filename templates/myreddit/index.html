@@ -1,0 +1,20 @@
+<h1>My Reddit</h1>
+
+<h2>Link List:</h2>
+{% if link_list %}
+	<ol>
+		{% for link in link_list %}
+			<li><a href="/myreddit/{{ link.id }}/vote/up/">^</a> {{ link.points }} <a href="/myreddit/{{ link.id }}/vote/down/">v</a>&nbsp;<a href="/myreddit/{{ link.id }}/">{{ link.description }}</a> (submitted {{ link.sub_date }})</li>
+		{% endfor %}
+	</ol>
+{% else %}
+	<p>No Links Available.</p>
+{% endif %}
+
+<h3>Submit a Link:</h3>
+<form action="/myreddit/submit/" method="post">
+	{% csrf_token %}
+	Link Name: <input type="text" name="name"/><br />
+	URL: <input type="text" name="link"/><br />
+	<input type="submit" value="Submit Link" />
+</form>
