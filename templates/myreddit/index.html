@@ -1,5 +1,18 @@
 <h1>My Reddit</h1>
 
+<h3>User:</h3>
+{% if username %}
+	<b>Welcome {{ username }}! - <a href="/myreddit/logout">Log Out</a></b>
+{% else %}
+	Log in:
+	<form action="/myreddit/login/" method="post">
+	{% csrf_token %}
+	User: <input type="text" name="username" /><br />
+	Password: <input type="password" name="pass" /> <br />
+	<input type="submit" value="Login!">
+	</form>
+{% endif %}
+
 <h2>Link List:</h2>
 {% if link_list %}
 	<ol>

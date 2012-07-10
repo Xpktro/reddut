@@ -5,4 +5,6 @@ urlpatterns = patterns('redditApp.views',
     url(r'^(?P<link_id>\d+)/$', 'link'),
     url(r'^(?P<link_id>\d+)/vote/(?P<way>(up|down))/$', 'vote'),
     url(r'^submit/$', 'submit'),
+    url(r'^login/$', 'login_view'),
+    url(r'^logout/$', 'logout_view'),
 )
