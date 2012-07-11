@@ -24,6 +24,7 @@
 	<p>No Links Available.</p>
 {% endif %}
 
+{% if username %}
 <h3>Submit a Link:</h3>
 <form action="/myreddit/submit/" method="post">
 	{% csrf_token %}
@@ -31,3 +32,4 @@
 	URL: <input type="text" name="link"/><br />
 	<input type="submit" value="Submit Link" />
 </form>
+{% endif %}

@@ -1,4 +1,5 @@
 from django.shortcuts import render_to_response, get_object_or_404
+
 from redditApp.models import Link
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -26,9 +27,9 @@ def login_view(request):
             login(request, user)
             return HttpResponseRedirect(reverse("redditApp.views.index"))
         else:
-            pass # <-!
+            pass  # <-!
     else:
-        return HttpResponseRedirect(reverse("redditApp.views.index")) # <-!
+        return HttpResponseRedirect(reverse("redditApp.views.index"))  # <-!
 
 
 def logout_view(request):
