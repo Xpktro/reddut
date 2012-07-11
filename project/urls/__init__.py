@@ -5,6 +5,6 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^myreddit/', include('redditApp.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^myreddit/', include('redditApp.urls')),
 )

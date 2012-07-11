@@ -3,7 +3,7 @@ from django.contrib import admin
 
 class LinkAdmin(admin.ModelAdmin):
     fieldsets = [
-                 (None,     {"fields": ["description", "link",]}),
+                 (None,     {"fields": ["description", "link", "sub_by",]}),
                  (None,     {"fields": ["sub_date", "points"]}),
     ]
     list_display = ("description", "sub_date", "points")

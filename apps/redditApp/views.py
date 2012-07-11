@@ -14,8 +14,11 @@ def index(request):
         usrnm = request.user.username
     else:
         usrnm = None
-    return render_to_response("myreddit/index.html", {"link_list": link_list, "username": usrnm},
-        context_instance=RequestContext(request))
+    return render_to_response(
+        "myreddit/index.html",
+        {"link_list": link_list, "username": usrnm},
+        context_instance=RequestContext(request)
+    )
 
 
 def login_view(request):
@@ -25,16 +28,16 @@ def login_view(request):
     if user is not None:
         if user.is_active:
             login(request, user)
-            return HttpResponseRedirect(reverse("redditApp.views.index"))
+            return HttpResponseRedirect(reverse("reddit_index"))
         else:
             pass  # <-!
     else:
-        return HttpResponseRedirect(reverse("redditApp.views.index"))  # <-!
+        return HttpResponseRedirect(reverse("reddit_index"))  # <-!
 
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse("redditApp.views.index"))
+    return HttpResponseRedirect(reverse("reddit_index"))
 
 
 def link(request, link_id):
@@ -49,7 +52,7 @@ def vote(request, link_id, way):
     elif way == "down":
         link.points -= 1
     link.save()
-    return HttpResponseRedirect(reverse("redditApp.views.index"))
+    return HttpResponseRedirect(reverse("reddit_index"))
 
 
 def submit(request):
@@ -57,8 +60,14 @@ def submit(request):
         name = request.POST["name"]
         url = request.POST["link"]
     except:
-        return HttpResponseRedirect(reverse("redditApp.views.index"))  # Cambiar a algo mas bonito.
+        return HttpResponseRedirect(reverse("reddit_index"))  # Cambiar a algo mas bonito.
     else:
-        l = Link(link=url, description=name, sub_date=timezone.now(), points=0)
+        l = Link(
+                 link=url,
+                 description=name,
+                 sub_date=timezone.now(),
+                 points=0,
+                 sub_by=request.user,
+        )
         l.save()
-    return HttpResponseRedirect(reverse("redditApp.views.index"))
+    return HttpResponseRedirect(reverse("reddit_index"))

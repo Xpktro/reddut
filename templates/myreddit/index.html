@@ -17,7 +17,7 @@
 {% if link_list %}
 	<ol>
 		{% for link in link_list %}
-			<li><a href="/myreddit/{{ link.id }}/vote/up/">^</a> {{ link.points }} <a href="/myreddit/{{ link.id }}/vote/down/">v</a>&nbsp;<a href="/myreddit/{{ link.id }}/">{{ link.description }}</a> (submitted {{ link.sub_date }})</li>
+			<li><a href="/myreddit/{{ link.id }}/vote/up/">^</a> {{ link.points }} <a href="/myreddit/{{ link.id }}/vote/down/">v</a>&nbsp;<a href="/myreddit/{{ link.id }}/">{{ link.description }}</a> (submitted {{ link.sub_date }} by {{ link.sub_by }})</li>
 		{% endfor %}
 	</ol>
 {% else %}
