@@ -11,6 +11,7 @@ class Link(models.Model):
 
     link = models.URLField(
         verbose_name=strings.LINK_URL,
+        blank=False,
     )
 
     description = models.CharField(
@@ -28,7 +29,7 @@ class Link(models.Model):
 
     sub_by = models.ForeignKey(User,
         verbose_name=strings.SUB_BY,
-        null=True
+        null=True,
     )
 
     def __unicode__(self):
@@ -36,3 +37,37 @@ class Link(models.Model):
 
     class Meta:
         verbose_name = strings.LINK
+
+
+class Comment(models.Model):
+    """Model Class for an User Comment"""
+
+    link = models.ForeignKey(
+        Link,
+        verbose_name=strings.LINK
+    )
+
+    comment = models.CharField(
+        verbose_name=strings.COMMENT,
+        max_length=1024,
+        blank=False,
+    )
+
+    author = models.ForeignKey(
+       User,
+       verbose_name=strings.AUTHOR,
+    )
+
+    date = models.DateTimeField(
+        verbose_name=strings.SUB_DATE,
+    )
+
+    points = models.IntegerField(
+        verbose_name=strings.POINTS,
+    )
+
+    def __unicode__(self):
+        return self.comment
+
+    class Meta:
+        verbose_name = strings.COMMENT

@@ -8,3 +8,6 @@ DESCRIPTION = _("Description")
 
 SUB_DATE = _("Submission Date")
 POINTS = _("Points")
+
+COMMENT = _("Comment")
+AUTHOR = _("Author")

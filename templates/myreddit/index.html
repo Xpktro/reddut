@@ -11,6 +11,7 @@
 	Password: <input type="password" name="pass" /> <br />
 	<input type="submit" value="Login!">
 	</form>
+	<a href="/myreddit/register/">Sign up</a>
 {% endif %}
 
 <h2>Link List:</h2>
@@ -28,8 +29,7 @@
 <h3>Submit a Link:</h3>
 <form action="/myreddit/submit/" method="post">
 	{% csrf_token %}
-	Link Name: <input type="text" name="name"/><br />
-	URL: <input type="text" name="link"/><br />
+	{{ submitform.as_p }}
 	<input type="submit" value="Submit Link" />
 </form>
 {% endif %}

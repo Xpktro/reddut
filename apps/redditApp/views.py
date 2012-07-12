@@ -1,6 +1,8 @@
 from django.shortcuts import render_to_response, get_object_or_404
 
 from redditApp.models import Link
+from redditApp.forms import LinkForm
+
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.utils import timezone
@@ -9,14 +11,14 @@ from django.contrib.auth import authenticate, login, logout
 
 
 def index(request):
-    link_list = Link.objects.all().order_by('-points')[:10]
+    link_list = Link.objects.all().order_by("-points")[:10]
     if request.user.is_authenticated():
         usrnm = request.user.username
     else:
         usrnm = None
     return render_to_response(
         "myreddit/index.html",
-        {"link_list": link_list, "username": usrnm},
+        {"link_list": link_list, "username": usrnm, "submitform": LinkForm, },
         context_instance=RequestContext(request)
     )
 
@@ -40,11 +42,6 @@ def logout_view(request):
     return HttpResponseRedirect(reverse("reddit_index"))
 
 
-def link(request, link_id):
-    link = get_object_or_404(Link, pk=link_id)
-    return render_to_response("myreddit/link.html", {"link": link})
-
-
 def vote(request, link_id, way):
     link = get_object_or_404(Link, pk=link_id)
     if way == "up":
@@ -56,18 +53,16 @@ def vote(request, link_id, way):
 
 
 def submit(request):
-    try:
-        name = request.POST["name"]
-        url = request.POST["link"]
-    except:
-        return HttpResponseRedirect(reverse("reddit_index"))  # Cambiar a algo mas bonito.
+    linkform = LinkForm(request.POST)
+    if linkform.is_valid():
+        link = linkform.save(commit=False)
+        link.sub_date = timezone.now()
+        link.points = 0
+        link.sub_by = request.user
+        link.save()
+        linkform.save()
     else:
-        l = Link(
-                 link=url,
-                 description=name,
-                 sub_date=timezone.now(),
-                 points=0,
-                 sub_by=request.user,
-        )
-        l.save()
+        pass
+        # return HttpResponseRedirect(reverse("reddit_index"))  # Cambiar a algo mas bonito.
+
     return HttpResponseRedirect(reverse("reddit_index"))

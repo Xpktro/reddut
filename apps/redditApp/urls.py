@@ -1,5 +1,7 @@
 from django.conf.urls import patterns, url
+from django.views.generic import DetailView
 from redditApp import views
+from redditApp.models import Link
 
 urlpatterns = patterns('',
     url(
@@ -9,8 +11,12 @@ urlpatterns = patterns('',
     ),
 
     url(
-        r'^(?P<link_id>\d+)/$',
-        views.link,
+        r'^(?P<pk>\d+)/$',
+        DetailView.as_view(
+            model=Link,
+            context_object_name="link",
+            template_name="myreddit/link.html",
+        ),
         name="reddit_link",
     ),
 
