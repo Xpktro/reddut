@@ -27,7 +27,8 @@ class Link(models.Model):
         verbose_name=strings.POINTS,
     )
 
-    sub_by = models.ForeignKey(User,
+    sub_by = models.ForeignKey(
+        User,
         verbose_name=strings.SUB_BY,
         null=True,
     )

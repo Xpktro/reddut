@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url
-from django.views.generic import DetailView
+
 from redditApp import views
-from redditApp.models import Link
+
 
 urlpatterns = patterns('',
     url(
@@ -12,14 +12,21 @@ urlpatterns = patterns('',
 
     url(
         r'^(?P<pk>\d+)/$',
-        DetailView.as_view(
-            model=Link,
-            context_object_name="link",
-            template_name="myreddit/link.html",
-        ),
+        views.LinkDetailView.as_view(),
         name="reddit_link",
     ),
 
+    url(
+        r'^(?P<pk>\d+)/comment/$',
+        views.comment,
+        name="reddit_comment",
+    ),
+
+    url(
+        r'^(?P<link_id>\d+)/comment/vote/(?P<way>(up|down))/$',
+        views.vote_comment,
+        name="reddit_vote_comment",
+    ),
 
     url(
         r'^(?P<link_id>\d+)/vote/(?P<way>(up|down))/$',
@@ -44,4 +51,10 @@ urlpatterns = patterns('',
         views.logout_view,
         name="reddit_logout",
     ),
+
+    url(
+        r'^register/$',
+        views.register,
+        name="reddit_register",
+    )
 )

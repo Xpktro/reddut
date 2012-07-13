@@ -1,4 +1,26 @@
-<h1>{{ link.description }} (Submitted: {{ link.sub_date }})</h1>
+<h1>{{ link.description }}</h1>
+
+<h3>(Submitted: {{ link.sub_date }} by {{ link.sub_by }})</h3>
+
 <h2><a href="{{ link.link }}"> {{ link.link }} </a></h2>
 Points: {{ link.points }}<br />
-<p><a href="/myreddit/">H O M E</a></p>
+
+<h2>Comments:</h2>
+{% if comments %}
+     <ol>
+     {% for comment in comments %}
+        <li> {{ comment.comment }} - {{ comment.author }} ({{ comment.date }})</li>
+     {% endfor %}
+    </ol>
+{% endif %}
+
+{% if username %}
+{{ username }}:
+<form action="./comment/", method="post">
+    {% csrf_token %}
+    {{ commentform.as_p }}
+    <input type="submit" value="Comment" />
+</form>
+{% endif %}
+
+<p><a href="../">H O M E</a></p>

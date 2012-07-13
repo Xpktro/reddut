@@ -2,23 +2,23 @@
 
 <h3>User:</h3>
 {% if username %}
-	<b>Welcome {{ username }}! - <a href="/myreddit/logout">Log Out</a></b>
+	<b>Welcome {{ username }}! - <a href="./logout">Log Out</a></b>
 {% else %}
 	Log in:
-	<form action="/myreddit/login/" method="post">
+	<form action="./login/" method="post">
 	{% csrf_token %}
 	User: <input type="text" name="username" /><br />
 	Password: <input type="password" name="pass" /> <br />
 	<input type="submit" value="Login!">
 	</form>
-	<a href="/myreddit/register/">Sign up</a>
+	<a href="./register/">Sign up</a>
 {% endif %}
 
 <h2>Link List:</h2>
 {% if link_list %}
 	<ol>
 		{% for link in link_list %}
-			<li><a href="/myreddit/{{ link.id }}/vote/up/">^</a> {{ link.points }} <a href="/myreddit/{{ link.id }}/vote/down/">v</a>&nbsp;<a href="/myreddit/{{ link.id }}/">{{ link.description }}</a> (submitted {{ link.sub_date }} by {{ link.sub_by }})</li>
+			<li><a href="./{{ link.id }}/vote/up/">^</a> {{ link.points }} <a href="./{{ link.id }}/vote/down/">v</a>&nbsp;<a href="/myreddit/{{ link.id }}/">{{ link.description }}</a> (submitted {{ link.sub_date }} by {{ link.sub_by }})</li>
 		{% endfor %}
 	</ol>
 {% else %}
@@ -27,7 +27,7 @@
 
 {% if username %}
 <h3>Submit a Link:</h3>
-<form action="/myreddit/submit/" method="post">
+<form action="./submit/" method="post">
 	{% csrf_token %}
 	{{ submitform.as_p }}
 	<input type="submit" value="Submit Link" />
