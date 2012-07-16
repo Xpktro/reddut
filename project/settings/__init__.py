@@ -4,7 +4,7 @@ from os.path import dirname, join, realpath
 
 ROOT_DIR = realpath(join(dirname(__file__), '..', '..'))
 PROJECT_DIR = realpath(join(dirname(__file__), '..'))
-SITE_URL = "http://demos.bitzeppelin.com/spsa/"
+#SITE_URL = "http://demos.bitzeppelin.com/spsa/"
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -75,6 +75,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    realpath(join(ROOT_DIR, 'static')),
 )
 
 # List of finder classes that know how to find static files in

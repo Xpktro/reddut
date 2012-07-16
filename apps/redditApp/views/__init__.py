@@ -2,13 +2,14 @@ from django.shortcuts import render_to_response, get_object_or_404
 
 from redditApp.forms import *
 from redditApp.models import Link
+from redditApp import strings
 
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.contrib import messages
 from django.utils import timezone
 from django.template import RequestContext
 from django.contrib.auth import authenticate, login, logout
-from django.views.generic import DetailView
 
 
 def index(request):
@@ -24,20 +25,6 @@ def index(request):
     )
 
 
-class LinkDetailView(DetailView):
-    model = Link
-    context_object_name = "link"
-    template_name = "myreddit/link.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(LinkDetailView, self).get_context_data(**kwargs)
-        context["commentform"] = CommentForm
-        context["comments"] = Comment.objects.filter(link__id=self.get_object().id)
-        if self.request.user.is_authenticated():
-            context["username"] = self.request.user
-        return context
-
-
 def login_view(request):
     username = request.POST["username"]
     password = request.POST["pass"]
@@ -47,9 +34,11 @@ def login_view(request):
             login(request, user)
             return HttpResponseRedirect(reverse("reddit_index"))
         else:
-            pass  # <-!
+            messages.error(request, strings.INACTIVE_USER)
+
     else:
-        return HttpResponseRedirect(reverse("reddit_index"))  # <-!
+        messages.error(request, strings.INVALID_USER_PASSWORD)
+        return HttpResponseRedirect(reverse("reddit_index"))
 
 
 def logout_view(request):
@@ -57,14 +46,19 @@ def logout_view(request):
     return HttpResponseRedirect(reverse("reddit_index"))
 
 
-def vote(request, link_id, way):
+def vote(request, link_id, way, next):
     link = get_object_or_404(Link, pk=link_id)
     if way == "up":
         link.points += 1
     elif way == "down":
         link.points -= 1
     link.save()
-    return HttpResponseRedirect(reverse("reddit_index"))
+    if next == "i":
+        return HttpResponseRedirect(reverse("reddit_index"))
+    elif next == "l":
+        return HttpResponseRedirect(
+            reverse("reddit_link", kwargs={"pk": link_id})
+        )
 
 
 def submit(request):
@@ -75,7 +69,6 @@ def submit(request):
         link.points = 0
         link.sub_by = request.user
         link.save()
-        #linkform.save() --Not sure if it's mandatory
     else:
         pass
         # return HttpResponseRedirect(reverse("reddit_index"))  # Cambiar a algo mas bonito.
@@ -89,15 +82,12 @@ def register(request):
         userform = UserForm(request.POST)
         if userform.is_valid():
             userform.save()
-        else:
-            return HttpResponseRedirect(reverse("reddit_register"))
-    else:
-        return render_to_response(
-            "myreddit/register.html",
-            {"userform": UserForm},
-            context_instance=RequestContext(request),
-        )
-    return HttpResponseRedirect(reverse("reddit_index"))
+            return HttpResponseRedirect(reverse("reddit_index"))
+    return render_to_response(
+        "myreddit/register.html",
+        {"userform": userform},
+        context_instance=RequestContext(request),
+    )
 
 
 def comment(request, pk):
@@ -111,3 +101,13 @@ def comment(request, pk):
         comment.points = 0
         comment.save()
     return HttpResponseRedirect(reverse("reddit_link", kwargs={"pk": pk}))
+
+
+def vote_comment(request, link_id, way, comment):
+    comment = get_object_or_404(Comment, pk=comment)
+    if way == "up":
+        comment.points += 1
+    elif way == "down":
+        comment.points -= 1
+    comment.save()
+    return HttpResponseRedirect(reverse("reddit_link", kwargs={"pk": link_id}))

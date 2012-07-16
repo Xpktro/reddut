@@ -11,3 +11,8 @@ POINTS = _("Points")
 
 COMMENT = _("Comment")
 AUTHOR = _("Author")
+
+INACTIVE_USER = _("Inactive User")
+INVALID_USER_PASSWORD = _("Invalid Username/Password")
+
+EMPTY_COMMENT = _("Empty Comment")

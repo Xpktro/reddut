@@ -1,17 +1,21 @@
+{% extends "myreddit/base.html" %}
+
+{% block content %}
+
 <h1>{{ link.description }}</h1>
 
 <h3>(Submitted: {{ link.sub_date }} by {{ link.sub_by }})</h3>
 
 <h2><a href="{{ link.link }}"> {{ link.link }} </a></h2>
-Points: {{ link.points }}<br />
+Points: <a href="./vote/up/l/">^</a> {{ link.points }} <a href="./vote/down/l/">v</a><br />
 
 <h2>Comments:</h2>
 {% if comments %}
-     <ol>
+     <ul>
      {% for comment in comments %}
-        <li> {{ comment.comment }} - {{ comment.author }} ({{ comment.date }})</li>
+        <li> <a href="./comment/vote/up/{{ comment.pk }}/">^</a> {{ comment.points }} <a href="./comment/vote/down/{{ comment.pk }}/">v</a> -> {{ comment.comment }} - {{ comment.author }} ({{ comment.date }})</li>
      {% endfor %}
-    </ol>
+    </ul>
 {% endif %}
 
 {% if username %}
@@ -24,3 +28,5 @@ Points: {{ link.points }}<br />
 {% endif %}
 
 <p><a href="../">H O M E</a></p>
+
+{% endblock %}
