@@ -1,37 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.css" />
-    <link rel="stylesheet" type="text/css" href="../../static/css/bootstrap.css" />
     <title>{% block title %}Reddut{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap-responsive.css">
+    <style>
+      body {
+        padding-top: 4.5em;
+        padding-left: 3em;
+        padding-right: 3em;
+      }
+    </style>
 </head>
-
+<body>
 <!-- Navbar -->
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container">
-      <a class="brand" href="#">Reddut</a>
+      <a class="brand" href="/myreddit/">Reddut</a>
       <div class="nav-collapse">
-        <ul class="nav">
-          <li class="active"><a href="/myreddit/">Home</a></li>
-        </ul>
         <ul class="nav pull-right"> 
             <li>
                 {% if username %}
-                    <p /> <p /><b>Welcome {{ username }}! - <a href="./logout">Log Out</a></b>
+                    <p /><p /><strong>Welcome {{ username }}! - <a href="./logout">Log Out</a></strong>
                 {% else %}
-                    <form action="./login/" method="post" class="navbar-form pull-left">
+                    <form action="./login/" method="post" class="navbar-form pull-right">
                     {% csrf_token %}
                     <input type="text" name="username" class="input-small" placeholder="Username" /> &nbsp;
-                    <input type="password" name="pass" class="input-small" placeholder="Password"/> &nbsp;
-                    <input type="submit" value="Login!" class="btn-mini">
+                    <input type="password" name="pass" class="input-small" placeholder="Password" /> &nbsp;
+                    <input type="submit" value="Login!" class="btn-medium btn-inverse" />
                     </form>
                 {% endif %}
             </li>
         </ul>
         {% if not username %}
         <ul class="nav pull-right">
-            <p /> <p /> <strong><a href="./register/">Sign up</a> or Login:</strong>
+            <p /><p /> <strong><a href="./register/">Sign up</a> or Login:</strong>
         </ul>
         {% endif %}
       </div><!--/.nav-collapse -->
@@ -40,8 +44,36 @@
 </div>
 <!-- Navbar -->
 
-<div class="container">
-    <br /> <br /> <br />
-{% block content %} {% endblock %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert fade in">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Error:</strong> {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="container-fluid">
+    <div class="span9">
+    {% block content %} {% endblock %}
+    </div>
+    <div class="span3">
+    {% block rightbar %} {% endblock %}
 </div>
+
+<script src="{{ STATIC_URL }}js/jquery.js"></script>
+<script src="{{ STATIC_URL }}js/bootstrap.js"></script>
+<script src="{{ STATIC_URL }}js/bootstrap-alert.js"></script>
+<script src="{{ STATIC_URL }}js/bootstrap-tooltip.js"></script>
+<script type="text/javascript">
+    $("[rel=tooltip]").tooltip();
+    $("a[rel=popover]")
+      .popover()
+      .click(function(e) {
+        e.preventDefault()
+      })
+</script>
+
+</body>
 </html>
+

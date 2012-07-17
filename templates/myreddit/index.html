@@ -3,30 +3,6 @@
 {% block content %}
 <h1>My Reddit</h1>
 
-{{ request.user }}
-
-<h3>User:</h3>
-{% if messages %}
-<h2 class="messages">
-    {% for message in messages %}
-    <span {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</span>
-    {% endfor %}
-</h2>
-{% endif %}
-
-{% if username %}
-	<b>Welcome {{ username }}! - <a href="./logout">Log Out</a></b>
-{% else %}
-	Log in:
-	<form action="./login/" method="post">
-	{% csrf_token %}
-	User: <input type="text" name="username" /><br />
-	Password: <input type="password" name="pass" /> <br />
-	<input type="submit" value="Login!">
-	</form>
-	<a href="./register/">Sign up</a>
-{% endif %}
-
 <h2>Link List:</h2>
 {% if link_list %}
 	<ol>
@@ -38,13 +14,23 @@
 	<p>No Links Available.</p>
 {% endif %}
 
+{% endblock %}
+
+{% block rightbar %}
+<div class="well">
+<h2>Submit a Link:</h2>
 {% if username %}
-<h3>Submit a Link:</h3>
 <form action="./submit/" method="post">
 	{% csrf_token %}
-	{{ submitform.as_p }}
-	<input type="submit" value="Submit Link" />
+	<label>Description:</label>
+	{{ submitform.description }}
+	<br />
+	<label>URL:</label>
+	{{ submitform.link }}
+	<input type="submit" value="Submit Link" class="btn btn-primary" />
 </form>
+{% else %}
+<h4><a href="#" rel="popover" data-content="Look above..." data-original-title="Login">Log In</a> or <a href="./register/">Register</a></h4>
 {% endif %}
-
+</div>
 {% endblock %}
